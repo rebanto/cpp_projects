@@ -1,6 +1,14 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
 
 int main() {
-    std::cout << "Hello, World!";
-    return 0;
+    string filename;
+
+    cout << "Filename: ";
+    getline(cin, filename);
+
+    cout << filename;
 }
