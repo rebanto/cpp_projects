@@ -9,6 +9,7 @@ struct User {
     int id;
     std::string username;
     std::string password;
+    double balance = 0;
 };
 
 std::string trim(const std::string& s);

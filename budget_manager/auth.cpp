@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
@@ -16,6 +17,24 @@ vector<User> load_users(const string& filename) {
     vector<User> users;
     ifstream fin(filename);
     string line;
+    map<int, double> balances;
+    ifstream fin_bal("finances.csv");
+    string bal_line;
+    while (getline(fin_bal, bal_line)) {
+        stringstream ss(bal_line);
+        string id_str, bal_str;
+        if (!getline(ss, id_str, ',')) continue;
+        if (!getline(ss, bal_str, ',')) continue;
+        try {
+            int id = stoi(trim(id_str));
+            double bal = stod(trim(bal_str));
+            balances[id] = bal;
+        } catch (...) {
+            continue;
+        }
+    }
+    fin_bal.close();
+
     while (getline(fin, line)) {
         line = trim(line);
         if (line.empty() || line[0] == '#') continue;
@@ -29,7 +48,9 @@ vector<User> load_users(const string& filename) {
         password = trim(password);
         if (id_str.empty() || username.empty() || password.empty()) continue;
         try {
-            users.push_back({stoi(id_str), username, password});
+            int id = stoi(id_str);
+            double bal = balances.count(id) ? balances[id] : 0.0;
+            users.push_back({id, username, password, bal});
         } catch (...) {
             continue;
         }
@@ -47,12 +68,13 @@ int add_user(const string& username, const string& password) {
     }
     int new_id = users.empty() ? 1 : users.back().id + 1;
     ofstream fout("users.csv", ios::out | ios::app);
-    if (!fout.is_open()) {
-        cerr << "Error opening file." << endl;
-        return -1;
-    }
     fout << new_id << "," << username << "," << password << endl;
     fout.close();
+
+    ofstream fout_finances("finances.csv", ios::out | ios::app);
+    fout_finances << new_id << "," << 0 << endl;
+    fout_finances.close();
+
     return new_id;
 }
 
@@ -104,7 +126,7 @@ pair<User, bool> auth() {
         int new_id = add_user(username, password);
         if (new_id != -1) {
             cout << "Sign up successful!" << endl;
-            return {User{new_id, username, password}, true};
+            return {User{new_id, username, password, 0.00}, true};
         } else {
             return {User{}, false};
         }
