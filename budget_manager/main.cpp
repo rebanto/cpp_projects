@@ -21,7 +21,16 @@ void deposit() {
 }
 
 void withdraw() {
+    double amount;
 
+    cout << "\033[2J\033[1;1H";
+    cout << "Current Balance: " << current_user.balance << endl << "Enter amount to withdraw:\t$";
+    cin >> amount;
+
+    current_user.balance -= amount;
+    cout << "\nSuccessful!" << endl;
+
+    Sleep(2000);
 }
 
 int main_loop() {
