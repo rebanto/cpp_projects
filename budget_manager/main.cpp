@@ -10,9 +10,15 @@ User current_user;
 void deposit() {
     double amount;
 
-    cout << "\033[2J\033[1;1H";
+    cout << "\033[2J" << "\033[1;1H";
     cout << "Current Balance: " << current_user.balance << endl << "Enter amount to deposit:\t$";
     cin >> amount;
+
+    if (amount < 0) {
+        cout << "\nInvalid input.";
+        Sleep(2000);
+        return;
+    }
 
     current_user.balance += amount;
     cout << "\nSuccessful!" << endl;
@@ -23,9 +29,19 @@ void deposit() {
 void withdraw() {
     double amount;
 
-    cout << "\033[2J\033[1;1H";
+    cout << "\033[2J" << "\033[1;1H";
     cout << "Current Balance: " << current_user.balance << endl << "Enter amount to withdraw:\t$";
     cin >> amount;
+
+    if (amount < 0) {
+        cout << "\nInvalid input.";
+        Sleep(2000);
+        return;
+    } else if (amount > current_user.balance) {
+        cout << "\nNot enough funds.";
+        Sleep(2000);
+        return;
+    }
 
     current_user.balance -= amount;
     cout << "\nSuccessful!" << endl;
@@ -60,17 +76,20 @@ int main_loop() {
 
 int main() {
     pair<User, bool> result;
+
+    cout << "\033[2J" << "\033[1;1H";
+
     do {
         result = auth();
     } while (!result.second);
 
-    cout << "\033[2J\033[1;1H";
+    cout << "\033[2J" << "\033[1;1H";
 
     current_user = result.first;
     cout << "Welcome, " << current_user.username << "!" << endl;
 
     do {
         main_loop();
-        cout << "\033[2J\033[1;1H";
+        cout << "\033[2J" << "\033[1;1H";
     } while (true);
 }

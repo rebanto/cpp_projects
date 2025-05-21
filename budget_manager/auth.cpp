@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <windows.h>
 
 using namespace std;
 
@@ -63,6 +64,8 @@ int add_user(const string& username, const string& password) {
     for (const auto& user : users) {
         if (user.username == username) {
             cout << "Username already exists.\n";
+            Sleep(2000);
+            cout << "\033[2J" << "\033[1;1H";
             return -1;
         }
     }
@@ -91,7 +94,6 @@ int login_user(const string& username, const string& password) {
 pair<User, bool> auth() {
     char action;
     string username, password;
-    int id;
 
     cout << "Welcome to the Budget Manager!\n";
 
@@ -117,6 +119,8 @@ pair<User, bool> auth() {
             }
         }
         cout << "Login failed. Incorrect username or password.\n";
+        Sleep(2000);
+        cout << "\033[2J" << "\033[1;1H";
         return {User{}, false};
     } else if (action == 's') {
         cout << "\nSIGN UP\nEnter username: ";
