@@ -7,14 +7,17 @@ using namespace std;
 
 User current_user;
 
-void deposit() {
+void deposit()
+{
     double amount;
 
     cout << "\033[2J" << "\033[1;1H";
-    cout << "Current Balance: " << current_user.balance << endl << "Enter amount to deposit:\t$";
+    cout << "Current Balance: " << current_user.balance << endl
+         << "Enter amount to deposit:\t$";
     cin >> amount;
 
-    if (amount < 0) {
+    if (amount < 0)
+    {
         cout << "\nInvalid input.";
         Sleep(2000);
         return;
@@ -26,18 +29,23 @@ void deposit() {
     Sleep(2000);
 }
 
-void withdraw() {
+void withdraw()
+{
     double amount;
 
     cout << "\033[2J" << "\033[1;1H";
-    cout << "Current Balance: " << current_user.balance << endl << "Enter amount to withdraw:\t$";
+    cout << "Current Balance: " << current_user.balance << endl
+         << "Enter amount to withdraw:\t$";
     cin >> amount;
 
-    if (amount < 0) {
+    if (amount < 0)
+    {
         cout << "\nInvalid input.";
         Sleep(2000);
         return;
-    } else if (amount > current_user.balance) {
+    }
+    else if (amount > current_user.balance)
+    {
         cout << "\nNot enough funds.";
         Sleep(2000);
         return;
@@ -49,7 +57,8 @@ void withdraw() {
     Sleep(2000);
 }
 
-int main_loop() {
+int main_loop()
+{
     int choice;
 
     cout << fixed << setprecision(2);
@@ -74,12 +83,14 @@ int main_loop() {
     }
 }
 
-int main() {
+int main()
+{
     pair<User, bool> result;
 
     cout << "\033[2J" << "\033[1;1H";
 
-    do {
+    do
+    {
         result = auth();
     } while (!result.second);
 
@@ -88,7 +99,8 @@ int main() {
     current_user = result.first;
     cout << "Welcome, " << current_user.username << "!" << endl;
 
-    do {
+    do
+    {
         main_loop();
         cout << "\033[2J" << "\033[1;1H";
     } while (true);
