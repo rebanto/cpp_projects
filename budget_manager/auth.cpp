@@ -134,3 +134,31 @@ pair<User, bool> auth() {
 
     return {User{}, false};
 }
+
+void save_user(const int& id, double balance) {
+    map<int, double> balances;
+    ifstream fin_bal("finances.csv");
+    string line;
+    while (getline(fin_bal, line)) {
+        stringstream ss(line);
+        string id_str, bal_str;
+        if (!getline(ss, id_str, ',')) continue;
+        if (!getline(ss, bal_str, ',')) continue;
+        try {
+            int uid = stoi(trim(id_str));
+            double bal = stod(trim(bal_str));
+            balances[uid] = bal;
+        } catch (...) {
+            continue;
+        }
+    }
+    fin_bal.close();
+
+    balances[id] = balance;
+
+    ofstream fout_bal("finances.csv", ios::out | ios::trunc);
+    for (const auto& pair : balances) {
+        fout_bal << pair.first << "," << pair.second << endl;
+    }
+    fout_bal.close();
+}
